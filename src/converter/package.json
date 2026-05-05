@@ -1,0 +1,15 @@
+{
+  "name": "agnt-converter",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "agnt_converter_bg.wasm",
+    "agnt_converter.js",
+    "agnt_converter.d.ts"
+  ],
+  "main": "agnt_converter.js",
+  "types": "agnt_converter.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
