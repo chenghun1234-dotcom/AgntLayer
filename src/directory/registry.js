@@ -12,10 +12,32 @@ export async function updateAgentMetadata(db, agentId, metadata) {
     `).bind(name, description, JSON.stringify(capabilities), agentId).run();
 }
 
+export async function getAgentDetail(db, agentId) {
+    const result = await db.prepare(`
+        SELECT agent_id, name, description, capabilities, is_premium, is_verified, rating, usage_count, subscription_tier, preferred_chain, balance, created_at 
+        FROM agents 
+        WHERE agent_id = ?
+    `).bind(agentId).first();
+    
+    if (result) {
+        result.capabilities = JSON.parse(result.capabilities || '[]');
+        // Fetch recent reviews
+        const reviews = await db.prepare(`
+            SELECT reviewer_agent_id, rating, comment, created_at 
+            FROM reviews 
+            WHERE target_agent_id = ? 
+            ORDER BY created_at DESC LIMIT 5
+        `).bind(agentId).all();
+        result.recent_reviews = reviews.results;
+    }
+    
+    return result;
+}
+
 export async function listAgents(db, options = {}) {
     const { capability, premiumOnly, limit = 20 } = options;
     
-    let query = "SELECT agent_id, name, description, capabilities, is_premium, rating, usage_count FROM agents";
+    let query = "SELECT agent_id, name, description, capabilities, is_premium, is_verified, rating, usage_count FROM agents";
     let params = [];
     
     let conditions = [];

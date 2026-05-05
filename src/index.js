@@ -5,7 +5,7 @@ import manifest from '__STATIC_CONTENT_MANIFEST'
 import { verifyAgentSignature, registerDID } from './iam/did'
 import { processTransfer } from './payment/ledger'
 import init, { transform } from './converter/agnt_converter'
-import { updateAgentMetadata, listAgents, submitReview } from './directory/registry'
+import { updateAgentMetadata, listAgents, submitReview, getAgentDetail } from './directory/registry'
 import { settleBalances } from './payment/settlement'
 import { checkSLA } from './security/sla'
 
@@ -68,20 +68,46 @@ app.post('/api/convert', async (c) => {
     }
 })
 
-// Directory: List & Search Agents (Ranking applied)
-app.get('/api/directory/list', async (c) => {
-    const capability = c.req.query('capability')
-    const premiumOnly = c.req.query('premium') === 'true'
-    const agents = await listAgents(c.env.AGNT_DB, { capability, premiumOnly })
-    return c.json(agents)
-})
+// Directory: Register/Update Agent Profile
+app.post('/api/directory/register', async (c) => {
+    const { agent_id, name, description, capabilities } = await c.req.json();
+    
+    // Check if agent exists
+    const exists = await c.env.AGNT_DB.prepare("SELECT 1 FROM agents WHERE agent_id = ?").bind(agent_id).first();
+    
+    if (exists) {
+        await updateAgentMetadata(c.env.AGNT_DB, agent_id, { name, description, capabilities });
+    } else {
+        await c.env.AGNT_DB.prepare("INSERT INTO agents (agent_id, name, description, capabilities, public_key) VALUES (?, ?, ?, ?, ?)")
+            .bind(agent_id, name, description, JSON.stringify(capabilities), "MOCK_PK").run();
+    }
+    
+    return c.json({ success: true, message: "Agent profile updated" });
+});
 
-// Directory: Update Agent Profile
-app.post('/api/directory/update', async (c) => {
-    const { agent_id, metadata } = await c.req.json()
-    await updateAgentMetadata(c.env.AGNT_DB, agent_id, metadata)
-    return c.json({ status: 'success' })
-})
+// Directory: Search & Discovery
+app.get('/api/directory/list', async (c) => {
+    const capability = c.req.query('capability');
+    const premiumOnly = c.req.query('premium') === 'true';
+    const agents = await listAgents(c.env.AGNT_DB, { capability, premiumOnly });
+    return c.json({ success: true, agents });
+});
+
+app.get('/api/directory/agent/:id', async (c) => {
+    const id = c.req.param('id');
+    const agent = await getAgentDetail(c.env.AGNT_DB, id);
+    if (!agent) return c.json({ success: false, error: "Agent not found" }, 404);
+    return c.json({ success: true, agent });
+});
+
+// Admin: Trust Mark (Verification)
+app.post('/api/admin/verify', async (c) => {
+    const { agent_id, status } = await c.req.json();
+    // In real use, add admin auth check here
+    await c.env.AGNT_DB.prepare("UPDATE agents SET is_verified = ? WHERE agent_id = ?")
+        .bind(status ? 1 : 0, agent_id).run();
+    return c.json({ success: true, message: `Agent ${agent_id} verification status updated` });
+});
 
 // Directory: Submit Review
 app.post('/api/directory/review', async (c) => {
