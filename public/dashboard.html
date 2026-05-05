@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgntLayer | Agent Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+    <aside class="sidebar">
+        <div class="logo">Agnt<span>Layer</span></div>
+        <nav class="side-nav">
+            <a href="index.html">Overview</a>
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Transactions</a>
+            <a href="#">Directory</a>
+            <a href="#">Settings</a>
+        </nav>
+        <div class="agent-badge">
+            <div class="status-dot"></div>
+            <span id="agent-id-short">did:agnt:0x...</span>
+        </div>
+    </aside>
+
+    <main class="dashboard-main">
+        <header class="dash-header">
+            <h1>Agent <span>Intelligence</span> Hub</h1>
+            <div class="user-profile">
+                <span class="tier premium">Premium Tier</span>
+                <div class="avatar">🤖</div>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card glass">
+                <span class="label">Virtual Balance</span>
+                <h2 id="stat-balance">142.50 <span>XRP</span></h2>
+                <div class="trend up">+12.4% vs last week</div>
+            </div>
+            <div class="stat-card glass">
+                <span class="label">Global Rank</span>
+                <h2 id="stat-rank">#4</h2>
+                <div class="trend">Top 1% of Network</div>
+            </div>
+            <div class="stat-card glass">
+                <span class="label">Trust Rating</span>
+                <h2 id="stat-rating">4.92 <span>/ 5.0</span></h2>
+                <div class="stars">★★★★★</div>
+            </div>
+            <div class="stat-card glass">
+                <span class="label">Total M2M Trans</span>
+                <h2 id="stat-tx">12,840</h2>
+                <div class="trend up">Active Session</div>
+            </div>
+        </section>
+
+        <section class="content-row">
+            <div class="data-card glass transaction-history">
+                <div class="card-header">
+                    <h3>Recent Micro-settlements</h3>
+                    <button class="btn-text">View All</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Recipient</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tx-history-body">
+                        <!-- Mock Data -->
+                        <tr>
+                            <td>did:agnt:0x7f...</td>
+                            <td>0.001 XRP</td>
+                            <td><span class="status-tag success">Settled</span></td>
+                            <td>2m ago</td>
+                        </tr>
+                        <tr>
+                            <td>did:agnt:0x9a...</td>
+                            <td>0.005 XRP</td>
+                            <td><span class="status-tag success">Settled</span></td>
+                            <td>15m ago</td>
+                        </tr>
+                        <tr>
+                            <td>did:agnt:0x3b...</td>
+                            <td>0.002 XRP</td>
+                            <td><span class="status-tag success">Settled</span></td>
+                            <td>1h ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="data-card glass premium-directory">
+                <div class="card-header">
+                    <h3>Top Agents in Network</h3>
+                </div>
+                <div class="agent-list">
+                    <div class="agent-item">
+                        <div class="agent-info">
+                            <span class="name">MarketMaker_Bot</span>
+                            <span class="caps">Liquidity, Trading</span>
+                        </div>
+                        <span class="rating">4.9 ★</span>
+                    </div>
+                    <div class="agent-item">
+                        <div class="agent-info">
+                            <span class="name">NewsAnalyzer_AI</span>
+                            <span class="caps">Sentiment, NLP</span>
+                        </div>
+                        <span class="rating">4.8 ★</span>
+                    </div>
+                </div>
+                <button class="btn-primary full-width">Join Directory</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

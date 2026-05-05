@@ -7,7 +7,9 @@ CREATE TABLE agents (
     description TEXT,
     capabilities TEXT, -- JSON array of strings
     is_premium BOOLEAN DEFAULT 0,
+    is_verified BOOLEAN DEFAULT 0,
     subscription_tier TEXT DEFAULT 'standard', -- 'standard', 'premium', 'enterprise'
+    preferred_chain TEXT DEFAULT 'XRPL', -- 'XRPL', 'Solana', 'Base'
     rating REAL DEFAULT 0.0,
     usage_count INTEGER DEFAULT 0,
     balance REAL DEFAULT 0.0,

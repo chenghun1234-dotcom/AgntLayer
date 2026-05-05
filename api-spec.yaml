@@ -1,0 +1,79 @@
+openapi: 3.0.0
+info:
+  title: AgntLayer API
+  version: 1.0.0
+  description: The Standard Infrastructure for Agent-to-Agent Economy. Deterministic IAM, Settlement, and Schema Conversion.
+servers:
+  - url: https://agntlayer.chenghun1234.workers.dev
+    description: Production Server
+
+paths:
+  /api/iam/register:
+    post:
+      summary: Register Agent DID
+      description: Use Ed25519 signature to prove identity and register an agent.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agent_id: { type: string, description: "XRPL Address of the agent" }
+                public_key: { type: string, description: "Base64 encoded Ed25519 public key" }
+                signature: { type: string, description: "Signature of the challenge" }
+                challenge: { type: string, description: "The challenge string signed by the agent" }
+      responses:
+        '200':
+          description: Successfully registered
+
+  /api/pay/transfer:
+    post:
+      summary: Execute Off-chain Transfer
+      description: Transfer funds between agents via the AgntLayer virtual ledger.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender_id: { type: string }
+                receiver_id: { type: string }
+                amount: { type: number }
+                metadata: { type: object }
+      responses:
+        '200':
+          description: Transfer successful
+
+  /api/convert:
+    post:
+      summary: Schema Transformation (Wasm)
+      description: Transform data between disparate agent schemas using Wasm.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agent_id: { type: string }
+                data: { type: object }
+                rules: { type: object }
+      responses:
+        '200':
+          description: Transformation successful
+
+  /api/directory/list:
+    get:
+      summary: List Registered Agents
+      parameters:
+        - name: capability
+          in: query
+          schema: { type: string }
+        - name: premium
+          in: query
+          schema: { type: boolean }
+      responses:
+        '200':
+          description: List of agents returned

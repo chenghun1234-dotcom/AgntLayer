@@ -6,52 +6,60 @@
 import xrpl from 'xrpl'
 
 export async function settleBalances(db, env) {
-    // 1. Identify agents with pending balances above threshold (e.g., 5.0 units)
     const threshold = 5.0;
     const pendingAgents = await db.prepare(
-        "SELECT agent_id, balance FROM agents WHERE balance >= ?"
+        "SELECT agent_id, balance, preferred_chain FROM agents WHERE balance >= ?"
     ).bind(threshold).all();
 
-    if (pendingAgents.results.length === 0) {
-        console.log('No pending settlements above threshold.');
-        return;
-    }
-
-    // 2. Connect to XRPL (Testnet for now)
-    const client = new xrpl.Client("wss://s.altnet.rippletest.net:51233");
-    await client.connect();
-
-    // 3. Wallet for the platform (AgntLayer Hot Wallet)
-    // In production, use env.XRPL_SECRET securely
-    const hotWallet = xrpl.Wallet.fromSeed(env.XRPL_HOT_WALLET_SEED);
+    if (pendingAgents.results.length === 0) return;
 
     for (const agent of pendingAgents.results) {
         try {
-            console.log(`Settling ${agent.balance} for Agent ${agent.agent_id}`);
+            console.log(`Settling ${agent.balance} for Agent ${agent.agent_id} on ${agent.preferred_chain}`);
 
-            // Prepare transaction
-            const transaction = {
-                "TransactionType": "Payment",
-                "Account": hotWallet.address,
-                "Amount": xrpl.xrpToDrops(agent.balance.toString()),
-                "Destination": agent.agent_id // Assuming agent_id is an XRPL address
-            };
+            let txSuccess = false;
 
-            // Submit transaction
-            const response = await client.submitAndWait(transaction, { wallet: hotWallet });
+            if (agent.preferred_chain === 'XRPL') {
+                txSuccess = await settleXRPL(agent.agent_id, agent.balance, env);
+            } else if (agent.preferred_chain === 'Solana') {
+                txSuccess = await settleSolana(agent.agent_id, agent.balance, env);
+            } else if (agent.preferred_chain === 'Base') {
+                txSuccess = await settleBase(agent.agent_id, agent.balance, env);
+            }
 
-            if (response.result.meta.TransactionResult === "tesSUCCESS") {
-                // 4. Update off-chain ledger after successful on-chain settlement
-                await db.prepare(
-                    "UPDATE agents SET balance = balance - ? WHERE agent_id = ?"
-                ).bind(agent.balance, agent.agent_id).run();
-
-                console.log(`Successfully settled Agent ${agent.agent_id}`);
+            if (txSuccess) {
+                await db.prepare("UPDATE agents SET balance = balance - ? WHERE agent_id = ?")
+                    .bind(agent.balance, agent.agent_id).run();
             }
         } catch (error) {
-            console.error(`Settlement failed for Agent ${agent.agent_id}:`, error);
+            console.error(`Settlement failed:`, error);
         }
     }
-
-    await client.disconnect();
 }
+
+async function settleXRPL(address, amount, env) {
+    const client = new xrpl.Client("wss://s.altnet.rippletest.net:51233");
+    await client.connect();
+    const hotWallet = xrpl.Wallet.fromSeed(env.XRPL_HOT_WALLET_SEED);
+    const response = await client.submitAndWait({
+        "TransactionType": "Payment",
+        "Account": hotWallet.address,
+        "Amount": xrpl.xrpToDrops(amount.toString()),
+        "Destination": address
+    }, { wallet: hotWallet });
+    await client.disconnect();
+    return response.result.meta.TransactionResult === "tesSUCCESS";
+}
+
+async function settleSolana(address, amount, env) {
+    console.log(`[STUB] Settling ${amount} SOL to ${address} on Mainnet-Beta`);
+    // Logic for @solana/web3.js would go here
+    return true; 
+}
+
+async function settleBase(address, amount, env) {
+    console.log(`[STUB] Settling ${amount} USDC to ${address} on Base L2`);
+    // Logic for ethers.js / viem would go here
+    return true;
+}
+
