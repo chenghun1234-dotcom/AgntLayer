@@ -1,5 +1,7 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/cloudflare-workers'
+// @ts-ignore
+import manifest from '__STATIC_CONTENT_MANIFEST'
 import { verifyAgentSignature, registerDID } from './iam/did'
 import { processTransfer } from './payment/ledger'
 import init, { transform } from './converter/agnt_converter'
@@ -9,8 +11,8 @@ import { checkSLA } from './security/sla'
 
 const app = new Hono()
 
-// Serve static assets from the public directory
-app.get('/*', serveStatic({ root: './' }))
+// Static Assets: Serving the Landing Page and Dashboard
+app.use('/*', serveStatic({ root: './', manifest }))
 
 // IAM: DID Registration & Verification
 app.post('/api/iam/register', async (c) => {
