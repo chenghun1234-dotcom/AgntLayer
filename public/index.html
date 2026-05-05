@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgntLayer | The Standard Infrastructure for Agent-to-Agent Economy</title>
+    <meta name="description" content="AgntLayer (Agent-Protocol.io) is the deterministic gateway for the AI agent economy. Zero-cost Agent IAM, sub-penny M2M payments, and high-performance Wasm schema mapping at the edge.">
+    <meta name="keywords" content="Agent IAM, M2M Payment Infrastructure, Autonomous Agent Communication, Micro-settlement API, AI Agent Protocol, XRPL Agent Settlement, Ed25519 Agent Auth">
+    <link rel="canonical" href="https://agent-protocol.io" />
+    
+    <!-- Open Graph / Social Media SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://agent-protocol.io">
+    <meta property="og:title" content="AgntLayer: Standard Infrastructure for AI Agents">
+    <meta property="og:description" content="Empower your agents with deterministic identity and sub-penny settlements. Built for the serverless edge.">
+    <meta property="og:image" content="https://agent-protocol.io/agntlayer_hero.png">
+
+    <!-- Structured Data (JSON-LD) for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "AgntLayer",
+      "applicationCategory": "Infrastructure",
+      "operatingSystem": "Web/Edge",
+      "description": "Deterministic infrastructure for AI Agent-to-Agent economy including IAM, Payments, and Schema Conversion.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="logo">Agnt<span>Layer</span></div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#iam">IAM</a>
+            <a href="#payment">Payment</a>
+            <a href="#docs">Documentation</a>
+            <a href="#" class="btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge">v1.0.0 Beta is Live</div>
+            <h1>The <span>Standard Gateway</span> for AI Agents</h1>
+            <p>Empower your agents with deterministic identity, lightning-fast settlements, and seamless schema conversion. Built for the Zero-Cost Edge.</p>
+            <div class="hero-btns">
+                <a href="#docs" class="btn-primary">Connect Agent</a>
+                <a href="https://github.com/AgntLayer" class="btn-secondary">View Protocol</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="glass-card">
+                <img src="agntlayer_hero.png" alt="AgntLayer Vision">
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="section-title">
+            <h2>Deterministic Infrastructure</h2>
+            <p>Why use expensive LLMs for basic infrastructure? AgntLayer provides zero-latency, deterministic logic at the edge.</p>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="icon">🆔</div>
+                <h3>Agent IAM</h3>
+                <p>Decentralized Identifiers (DID) based on EdDSA. Secure, model-free authentication for every autonomous entity.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">💳</div>
+                <h3>M2M Payments</h3>
+                <p>Off-chain virtual ledger for sub-penny micro-settlements. Periodic on-chain settlement with zero gas overhead.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔄</div>
+                <h3>Schema Converter</h3>
+                <p>High-performance Rust/Wasm based mapping. Seamlessly translate between disparate agent schemas in milliseconds.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="docs" class="docs">
+        <div class="section-title">
+            <h2>Technical Documentation</h2>
+            <p>Integrate AgntLayer into your autonomous agent in minutes. No LLMs, no complexity.</p>
+        </div>
+        <div class="docs-grid">
+            <div class="doc-item">
+                <h3>1. Identity (IAM)</h3>
+                <p>Register your agent using an Ed25519 public key. AgntLayer issues a DID (Decentralized Identifier) that serves as your global agent identity.</p>
+                <code>POST /api/iam/register</code>
+            </div>
+            <div class="doc-item">
+                <h3>2. Settlement (M2M)</h3>
+                <p>Send and receive sub-penny payments. AgntLayer manages an off-chain ledger on Cloudflare D1 and settles to XRPL periodically to minimize gas fees.</p>
+                <code>POST /api/pay/transfer</code>
+            </div>
+            <div class="doc-item">
+                <h3>3. Transformation</h3>
+                <p>Convert disparate API schemas using our high-performance Wasm engine. Seamlessly bridge communication between specialized agents.</p>
+                <code>POST /api/convert</code>
+            </div>
+        </div>
+    </section>
+
+    <section class="code-preview">
+        <div class="window">
+            <div class="window-header">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="title">agntlayer.json</span>
+            </div>
+            <div class="window-body">
+                <pre><code>{
+  <span class="key">"agent_id"</span>: <span class="string">"did:agnt:0x7f3e...9a2b"</span>,
+  <span class="key">"capabilities"</span>: [<span class="string">"data-analysis"</span>, <span class="string">"market-execution"</span>],
+  <span class="key">"auth"</span>: {
+    <span class="key">"type"</span>: <span class="string">"Ed25519"</span>,
+    <span class="key">"public_key"</span>: <span class="string">"AgntLayer_EDDSA_PK_..."</span>
+  },
+  <span class="key">"settlement"</span>: {
+    <span class="key">"currency"</span>: <span class="string">"XRP"</span>,
+    <span class="key">"ledger"</span>: <span class="string">"Agnt-Ledger-D1"</span>
+  }
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">Agnt<span>Layer</span></div>
+            <p>© 2026 AgntLayer Protocol. Built on Cloudflare Workers.</p>
+            <div class="socials">
+                <a href="#">X / Twitter</a>
+                <a href="#">GitHub</a>
+                <a href="#">Discord</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
