@@ -7,12 +7,12 @@ ENVIRONMENT = "production"
 
 [[kv_namespaces]]
 binding = "AGNT_IDENTITY"
-id = "placeholder-kv-id"
+id = "99003c8b85454c3a8c5537fb37feccf3"
 
 [[d1_databases]]
 binding = "AGNT_DB"
 database_name = "agnt-ledger"
-database_id = "placeholder-d1-id"
+database_id = "d2df3b3b-a510-4fb6-a1c8-a4b309e4d421"
 
 [site]
 bucket = "./public"
