@@ -11,8 +11,14 @@ import { checkSLA } from './security/sla'
 
 const app = new Hono()
 
-// Static Assets: Serving the Landing Page and Dashboard
-app.use('/*', serveStatic({ root: './', manifest }))
+// Explicit Routes for Main Pages
+app.get('/', serveStatic({ path: './index.html', manifest }))
+app.get('/index.html', serveStatic({ path: './index.html', manifest }))
+app.get('/dashboard', serveStatic({ path: './dashboard.html', manifest }))
+app.get('/dashboard.html', serveStatic({ path: './dashboard.html', manifest }))
+
+// Static Assets: Serving CSS, JS, Images
+app.get('/*', serveStatic({ root: './', manifest }))
 
 // IAM: DID Registration & Verification
 app.post('/api/iam/register', async (c) => {
